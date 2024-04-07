@@ -7,6 +7,12 @@ This repository contains the implementation of the Enhanced Authentication API f
 - **Enhanced Token Generation:** Implementation of a more secure mechanism for generating authentication tokens to mitigate potential security risks.
 - **OAuth2 Integration:** Integration of OAuth2 authentication for seamless third-party authentication, enhancing the application's versatility for integration with external services.
 
+## Client
+![Login Screen](client/public/Screenshot 2024-04-08 at 12.42.34 AM.png)
+![Google Login](client/public/Screenshot 2024-04-08 at 12.43.15 AM.png)
+![Profile Page](client/public/Screenshot 2024-04-08 at 12.43.29 AM.png)
+
+
 ## Getting Started
 
 To use this feature, follow these steps:
@@ -14,4 +20,4 @@ To use this feature, follow these steps:
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone [https://github.com/yourusername/enhanced-authentication-api.git](https://github.com/yourusername/enhanced-authentication-api.git)
+   git clone https://github.com/Yogi0804/User_Profile.git
