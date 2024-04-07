@@ -7,18 +7,38 @@ const { generateUniqueUsername } = require("./helper");
 
 exports.register = async (req, res) => {
   try {
+    console.log(req.body);
     const { email, password } = req.body;
-    const username = await generateUniqueUsername(email);
+    const userName = await generateUniqueUsername(email);
+    console.log({ userName });
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.findOne({ email: email });
+    if (user) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+
     const newUser = new User({
-      username,
+      userName,
       email,
       password: hashedPassword,
       profile: { visibility: "public" },
       role: "user",
     });
-    await newUser.save();
-    res.status(201).json({ message: "User registered successfully" });
+    const userData = await newUser.findOneAndUpdate({
+      email: email,
+    });
+    const responseData = {
+      username: userData.userName,
+      email: userData.email,
+    };
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: 10 * 60 * 3,
+    });
+    res.cookie("token", token);
+    res
+      .status(201)
+      .json({ message: "User registered successfully", data: responseData });
   } catch (error) {
     if (error.code === 11000 && error.keyValue.userName === null) {
       res.status(400).json({ error: "Email already exists" });
@@ -42,10 +62,9 @@ exports.login = async (req, res) => {
     if (!isPasswordMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 60,
-    });
-    res.status(200).json({ token });
+    res
+      .status(200)
+      .json({ message: "User logged in successfully", data: user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

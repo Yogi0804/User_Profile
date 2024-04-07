@@ -6,6 +6,7 @@ const userProfileRoutes = require("./routes/userProfileRoutes");
 const { errorHandler } = require("./middleware/error");
 const passport = require("passport");
 const session = require("express-session");
+const cors = require("cors");
 require("./config/passport");
 const dotenv = require("dotenv");
 
@@ -29,6 +30,7 @@ function isLoggedIn(req, res, next) {
 }
 
 // Middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(
   session({ secret: "userProfile", resave: false, saveUninitialized: true })
@@ -45,7 +47,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/protected", isLoggedIn, (req, res) => {
-  res.send(`Hello ${req.user.displayName}`);
+  res.send(`Hello `);
 });
 
 app.get("/logout", function (req, res, next) {

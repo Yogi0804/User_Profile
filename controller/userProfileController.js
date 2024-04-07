@@ -3,9 +3,13 @@ const User = require("../models/User");
 exports.getProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findOne({ _id: id });
     if (!user) return res.status(404).json({ message: "User not found" });
-    if (user.profile.visibility === "private" && req.user.role !== "admin") {
+    if (
+      user.profile.visibility === "private" &&
+      userName !== user.userName &&
+      req.user.role !== "admin"
+    ) {
       return res.status(403).json({ message: "Access denied" });
     }
     res.status(200).json({ user });
@@ -16,9 +20,11 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    const updates = Object.keys(req.body);
+    const { id } = req.params;
+    const updates = req.body; // Instead of getting keys, get the entire body
     const allowedUpdates = ["name", "bio", "phone", "photo", "visibility"];
-    const isValidOperation = updates.every((update) =>
+
+    const isValidOperation = Object.keys(updates).every((update) =>
       allowedUpdates.includes(update)
     );
 
@@ -26,10 +32,13 @@ exports.updateProfile = async (req, res) => {
       return res.status(400).json({ error: "Invalid updates!" });
     }
 
-    const user = await User.findById(req.user._id);
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    updates.forEach((update) => (user.profile[update] = req.body[update]));
-    await user.save();
+    profile = { ...user.profile, ...updates };
+    await User.updateOne({ _id: id }, { profile });
 
     res.status(200).json({ user: user.profile });
   } catch (error) {
