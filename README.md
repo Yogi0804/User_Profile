@@ -8,9 +8,9 @@ This repository contains the implementation of the Enhanced Authentication API f
 - **OAuth2 Integration:** Integration of OAuth2 authentication for seamless third-party authentication, enhancing the application's versatility for integration with external services.
 
 ## Client
-![Login Screen](client/public/Screenshot 2024-04-08 at 12.42.34 AM.png)
-![Google Login](client/public/Screenshot 2024-04-08 at 12.43.15 AM.png)
-![Profile Page](client/public/Screenshot 2024-04-08 at 12.43.29 AM.png)
+![Login Screen](client/public/login_screen.png)
+![Google Login](client/public/google_login.png)
+![Profile Page](client/public/profile.png)
 
 
 ## Getting Started
